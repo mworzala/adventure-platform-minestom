@@ -5,7 +5,8 @@ An (Unofficial) integration between the [adventure](https://github.com/KyoriPowe
 See the [offical documentation](https://docs.adventure.kyori.net/) for usage.
 This integration follows the same principals as the others.
 
-`adventure-platform-minestom` can be included with the following dependency:
+
+`adventure-platform-minestom` can be found on [Jitpack](https://jitpack.io/#mworzala/adventure-platform-minestom):
 ```groovy
 repositories {
     maven { url 'https://jitpack.io' }
