@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group 'net.kyori'
+version '4.3.0'
+
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
+
+ext.adventure = "4.0.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://libraries.minecraft.net' }
+    maven { url 'https://repo.spongepowered.org/maven' }
+
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+}
+
+dependencies {
+    implementation "net.kyori:adventure-platform-api:${rootProject.adventure}"
+    implementation "net.kyori:adventure-platform-facet:${rootProject.adventure}"
+    implementation "net.kyori:adventure-nbt:${rootProject.adventure}"
+    implementation("net.kyori:adventure-text-serializer-gson:${rootProject.adventure}") {
+        exclude group: "com.google.code.gson"
+    }
+
+//    compileOnly 'com.github.Minestom:Minestom:2141792fcf'
+    compile 'com.github.Minestom:Minestom:8d946b70ac'
+}
