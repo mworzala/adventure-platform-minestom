@@ -1,4 +1,5 @@
-# adventure-platform-minestom
+# adventure-platform-minestom [![](https://jitpack.io/v/mworzala/adventure-platform-minestom.svg)](https://jitpack.io/#mworzala/adventure-platform-minestom)
+
 An (Unofficial) integration between the [adventure](https://github.com/KyoriPowered/adventure) library and the [Minestom](https://github.com/Minestom/Minestom) server library.
 
 ### Usage
