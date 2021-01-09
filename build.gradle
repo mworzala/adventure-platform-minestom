@@ -27,5 +27,5 @@ dependencies {
         exclude group: "com.google.code.gson"
     }
 
-    implementation 'com.github.Minestom:Minestom:97a29c6ccf'
+    implementation 'com.github.Minestom:Minestom:85390662b7'
 }
