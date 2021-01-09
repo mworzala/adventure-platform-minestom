@@ -1,5 +1,6 @@
 package demo;
 
+import demo.command.BookCommand;
 import net.kyori.adventure.platform.minestom.MinestomAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainDemo {
+    public static MinestomAudiences audiences;
 
     public static void main(String[] args) {
         // Initialization
@@ -32,7 +34,9 @@ public class MainDemo {
         // Enable the auto chunk loading (when players come close)
         instanceContainer.enableAutoChunkLoad(true);
 
-        MinestomAudiences audiences = MinestomAudiences.create();
+
+        audiences = MinestomAudiences.create();
+        MinecraftServer.getCommandManager().register(new BookCommand());
 
         // Add an event callback to specify the spawning instance (and the spawn position)
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();

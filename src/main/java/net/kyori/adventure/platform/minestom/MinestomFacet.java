@@ -1,5 +1,7 @@
 package net.kyori.adventure.platform.minestom;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.key.Key;
@@ -10,6 +12,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
+import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.sound.SoundCategory;
@@ -17,7 +20,11 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
 import static net.kyori.adventure.platform.facet.Knob.logUnsupported;
 import static net.kyori.adventure.platform.minestom.MinestomComponentSerializer.get;
@@ -192,7 +199,25 @@ public class MinestomFacet<V> extends FacetBase<V> {
         }
     }
 
-    // todo books
+    static class Book extends Message<Player> implements Facet.Book<Player, JsonMessage, WrittenBookMeta> {
+        protected Book() {
+            super(Player.class);
+        }
+
+        @Override
+        public @Nullable WrittenBookMeta createBook(@NonNull JsonMessage title, @NonNull JsonMessage author, @NonNull Iterable<JsonMessage> pages) {
+            final WrittenBookMeta bookMeta = new WrittenBookMeta();
+            bookMeta.setTitle(title.getRawMessage());
+            bookMeta.setAuthor(title.getRawMessage());
+            bookMeta.setPages(ImmutableList.copyOf(pages));
+            return bookMeta;
+        }
+
+        @Override
+        public void openBook(@NonNull Player viewer, @NonNull WrittenBookMeta book) {
+            viewer.openBook(book);
+        }
+    }
 
 //    static class BossBarBuilder extends MinestomFacet<Player> implements Facet.BossBar.Builder<Player, MinestomFacet.BossBar> {
 //        protected BossBarBuilder() {

@@ -19,8 +19,10 @@ public class MinestomAudience extends FacetAudience<CommandSender> {
             MinestomFacet.Sound::new);
     private static final Collection<Facet.TabList<? extends Player, ?>> TAB_LIST = Facet.of(
             MinestomFacet.TabList::new);
+    private static final Collection<Facet.Book<? extends Player, ?, ?>> BOOK = Facet.of(
+            MinestomFacet.Book::new);
 
     public MinestomAudience(Collection<CommandSender> viewers) {
-        super(viewers, null, CHAT, ACTION_BAR, TITLE, SOUND, null, null, TAB_LIST);
+        super(viewers, null, CHAT, ACTION_BAR, TITLE, SOUND, BOOK, null, TAB_LIST);
     }
 }
