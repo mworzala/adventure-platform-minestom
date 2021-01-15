@@ -311,7 +311,7 @@ public class MinestomFacet<V> extends FacetBase<V> {
 
         @Override
         public void close() {
-            this.bar.getViewers().forEach(this.bar::removeViewer);
+            this.bar.delete();
         }
 
         private byte getBitFlag(@NotNull net.kyori.adventure.bossbar.BossBar.Flag flag) {
