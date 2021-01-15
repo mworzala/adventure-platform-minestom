@@ -9,6 +9,10 @@ import net.kyori.adventure.platform.facet.Facet;
 import net.kyori.adventure.platform.facet.FacetBase;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.bossbar.BarColor;
+import net.minestom.server.bossbar.BarDivision;
+import net.minestom.server.bossbar.BossBar;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
@@ -20,10 +24,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 import static net.kyori.adventure.platform.facet.Knob.logUnsupported;
@@ -216,6 +217,114 @@ public class MinestomFacet<V> extends FacetBase<V> {
         @Override
         public void openBook(@NonNull Player viewer, @NonNull WrittenBookMeta book) {
             viewer.openBook(book);
+        }
+    }
+
+    static class BossBarBuilder extends MinestomFacet<Player> implements Facet.BossBar.Builder<Player, MinestomFacet.BossBar> {
+        protected BossBarBuilder() {
+            super(Player.class);
+        }
+
+        @Override
+        public MinestomFacet.@NonNull BossBar createBossBar(final @NonNull Collection<Player> viewers) {
+            return new MinestomFacet.BossBar(viewers);
+        }
+    }
+
+    static class BossBar extends Message<Player> implements Facet.BossBar<Player> {
+        private final net.minestom.server.bossbar.BossBar bar;
+        private final Collection<Player> initialViewers;
+
+        protected BossBar(final @NotNull Collection<Player> viewers) {
+            super(Player.class);
+            bar = new net.minestom.server.bossbar.BossBar(ColoredText.of(""), BarColor.PINK, BarDivision.SOLID);
+            this.initialViewers = viewers;
+        }
+
+        @Override
+        public void bossBarInitialized(net.kyori.adventure.bossbar.@NonNull BossBar bar) {
+            Facet.BossBar.super.bossBarInitialized(bar);
+            initialViewers.forEach(this.bar::addViewer);
+        }
+
+        @Override
+        public void bossBarNameChanged(net.kyori.adventure.bossbar.@NonNull BossBar bar, @NonNull Component oldName, @NonNull Component newName) {
+            this.bar.setTitle(MinestomComponentSerializer.get().serialize(newName));
+        }
+
+        @Override
+        public void bossBarProgressChanged(net.kyori.adventure.bossbar.@NonNull BossBar bar, float oldProgress, float newProgress) {
+            this.bar.setProgress(newProgress);
+        }
+
+        @Override
+        public void bossBarColorChanged(net.kyori.adventure.bossbar.@NonNull BossBar bar, net.kyori.adventure.bossbar.BossBar.@NonNull Color oldColor, net.kyori.adventure.bossbar.BossBar.@NonNull Color newColor) {
+            this.bar.setColor(BarColor.valueOf(newColor.name()));
+        }
+
+        @Override
+        public void bossBarOverlayChanged(net.kyori.adventure.bossbar.@NonNull BossBar bar, net.kyori.adventure.bossbar.BossBar.@NonNull Overlay oldOverlay, net.kyori.adventure.bossbar.BossBar.@NonNull Overlay newOverlay) {
+            BarDivision newDivision;
+            switch (newOverlay) {
+                case NOTCHED_6:
+                    newDivision = BarDivision.SEGMENT_6;
+                    break;
+                case NOTCHED_10:
+                    newDivision = BarDivision.SEGMENT_10;
+                    break;
+                case NOTCHED_12:
+                    newDivision = BarDivision.SEGMENT_12;
+                    break;
+                case NOTCHED_20:
+                    newDivision = BarDivision.SEGMENT_20;
+                    break;
+                default:
+                    newDivision = BarDivision.SOLID;
+            }
+            this.bar.setDivision(newDivision);
+        }
+
+        @Override
+        public void bossBarFlagsChanged(net.kyori.adventure.bossbar.@NonNull BossBar bar, @NonNull Set<net.kyori.adventure.bossbar.BossBar.Flag> flagsAdded, @NonNull Set<net.kyori.adventure.bossbar.BossBar.Flag> flagsRemoved) {
+            byte flags = this.bar.getFlags();
+            for (net.kyori.adventure.bossbar.BossBar.Flag flag : flagsAdded)
+                flags |= getBitFlag(flag);
+            for (net.kyori.adventure.bossbar.BossBar.Flag flag : flagsRemoved)
+                flags &= ~getBitFlag(flag);
+            this.bar.setFlags(flags);
+        }
+
+        @Override
+        public void addViewer(@NonNull Player viewer) {
+            this.bar.addViewer(viewer);
+        }
+
+        @Override
+        public void removeViewer(@NonNull Player viewer) {
+            this.bar.removeViewer(viewer);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return this.bar.getViewers().isEmpty();
+        }
+
+        @Override
+        public void close() {
+            this.bar.getViewers().forEach(this.bar::removeViewer);
+        }
+
+        private byte getBitFlag(@NotNull net.kyori.adventure.bossbar.BossBar.Flag flag) {
+            switch (flag) {
+                case DARKEN_SCREEN:
+                    return 0x1;
+                case PLAY_BOSS_MUSIC:
+                    return 0x2;
+                case CREATE_WORLD_FOG:
+                    return 0x4;
+                default:
+                    return 0x0;
+            }
         }
     }
 

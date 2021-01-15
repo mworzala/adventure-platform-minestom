@@ -1,6 +1,8 @@
 package demo;
 
 import demo.command.BookCommand;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.platform.minestom.MinestomAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -42,6 +44,7 @@ public class MainDemo {
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
             final Player player = event.getPlayer();
+            final Audience audience = audiences.player(player);
             event.setSpawningInstance(instanceContainer);
             player.setRespawnPoint(new Position(0, 42, 0));
 
@@ -49,8 +52,13 @@ public class MainDemo {
                 Component component = Component.text("I like adventure!")
                         .color(TextColor.color(0xff00ff))
                         .hoverEvent(HoverEvent.showText(Component.text("It is convenient.")));
-                audiences.player(player).sendMessage(component);
-                player.sendMessage("Hello, World");
+
+                audience.sendMessage(component);
+
+                audience.showBossBar(BossBar.bossBar(component, 0.5f, BossBar.Color.YELLOW, BossBar.Overlay.PROGRESS));
+
+
+
             }).schedule();
         });
 

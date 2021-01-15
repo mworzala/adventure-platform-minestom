@@ -17,12 +17,14 @@ public class MinestomAudience extends FacetAudience<CommandSender> {
             MinestomFacet.Title::new);
     private static final Collection<Facet.Sound<? extends Player, ?>> SOUND = Facet.of(
             MinestomFacet.Sound::new);
-    private static final Collection<Facet.TabList<? extends Player, ?>> TAB_LIST = Facet.of(
-            MinestomFacet.TabList::new);
     private static final Collection<Facet.Book<? extends Player, ?, ?>> BOOK = Facet.of(
             MinestomFacet.Book::new);
+    private static final Collection<Facet.BossBar.Builder<Player, ? extends Facet.BossBar<Player>>> BOSS_BAR = Facet.of(
+            MinestomFacet.BossBarBuilder::new);
+    private static final Collection<Facet.TabList<? extends Player, ?>> TAB_LIST = Facet.of(
+            MinestomFacet.TabList::new);
 
     public MinestomAudience(Collection<CommandSender> viewers) {
-        super(viewers, null, CHAT, ACTION_BAR, TITLE, SOUND, BOOK, null, TAB_LIST);
+        super(viewers, null, CHAT, ACTION_BAR, TITLE, SOUND, BOOK, BOSS_BAR, TAB_LIST);
     }
 }
