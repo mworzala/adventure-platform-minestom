@@ -328,20 +328,6 @@ public class MinestomFacet<V> extends FacetBase<V> {
         }
     }
 
-//    static class BossBarBuilder extends MinestomFacet<Player> implements Facet.BossBar.Builder<Player, MinestomFacet.BossBar> {
-//        protected BossBarBuilder() {
-//            super(Player.class);
-//        }
-//
-//        @NotNull
-//        @Override
-//        public MinestomFacet.BossBar createBossBar(@NonNull Collection<Player> viewers) {
-//            return new BossBar(viewers);
-//        }
-//    }
-
-    // todo Boss bar
-
     static class TabList extends Message<Player> implements Facet.TabList<Player, JsonMessage> {
         protected TabList() {
             super(Player.class);
