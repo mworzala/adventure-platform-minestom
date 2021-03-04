@@ -3,7 +3,9 @@ package demo;
 import demo.command.BookCommand;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.platform.minestom.MinestomAudiences;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
@@ -11,10 +13,12 @@ import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.Position;
 import net.minestom.server.world.biomes.Biome;
 
@@ -60,6 +64,16 @@ public class MainDemo {
 
 
             }).schedule();
+        });
+
+        globalEventHandler.addEventCallback(PlayerChatEvent.class, event -> {
+            final Audience player = audiences.player(event.getPlayer());
+
+
+            event.getPlayer().playSound("block.lever.click", SoundCategory.BLOCKS, event.getPlayer().getPosition().toBlockPosition(), 1f, 1f);
+
+            player.playSound(Sound.sound(Key.key("block.lever.click"), Sound.Source.BLOCK, 1f, 1f));
+            player.sendMessage(Component.text("Hello, World"));
         });
 
         // Start the server on port 25565

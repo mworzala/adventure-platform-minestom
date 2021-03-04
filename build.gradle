@@ -23,11 +23,11 @@ repositories {
 dependencies {
     api "net.kyori:adventure-platform-api:${rootProject.adventure}"
     implementation "net.kyori:adventure-platform-facet:${rootProject.adventure}"
-    implementation "net.kyori:adventure-nbt:${rootProject.adventure}"
-    implementation("net.kyori:adventure-text-serializer-gson:${rootProject.adventure}") {
+    implementation "net.kyori:adventure-nbt:4.7.0-SNAPSHOT"
+    implementation("net.kyori:adventure-text-serializer-gson:4.7.0-SNAPSHOT") {
         exclude group: "com.google.code.gson"
     }
 
-    compileOnly 'com.github.Minestom:Minestom:85390662b7'
-    testCompile 'com.github.Minestom:Minestom:85390662b7'
+    compileOnly 'com.github.Minestom:Minestom:f7ec45802f'
+    testCompile 'com.github.Minestom:Minestom:f7ec45802f'
 }
